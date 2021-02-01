@@ -1,93 +1,103 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 
-<!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
+<div  id="my_data"></div>
+<div  style="width:1200px; margin:0 auto;" id="my_dataviz"></div>
+<center>
+  <div>
 
-<!-- Create a div where the graph will take place -->
-<div  style="width:800px; margin:0 auto;" id="my_dataviz"></div>
-
-
-<script src="https://d3js.org/d3.v4.js"></script>
-
-
+<button onclick="update(dataset1)">2018-2013</button>
+<button onclick="update(dataset2)">2013-2008</button>
+<button onclick="update(dataset3)">2008-2003</button>
+<button onclick="update(dataset4)">2003-1998</button>
+<h2>Periodos</h2>
+<div>
+<center>
 <script>
-    
+
+  var dataset1 = [];
+  var dataset2 = [];
+  var dataset3 = [];
+  var dataset4 = [];
 // set the dimensions and margins of the graph
 var margin = {top: -100, right: -200, bottom: -100, left: 250},
-  width = 850 - margin.left - margin.right,
-  height = 850 - margin.top - margin.bottom;
+width = 850 - margin.left - margin.right,
+height = 850 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
 .append("svg")
-  .attr("width", width - 10 + margin.left + margin.right+1000)
-  .attr("height", height + margin.top + margin.bottom)
+.attr("width", width - 10 + margin.left + margin.right+1000)
+.attr("height", height + margin.top + margin.bottom)
 .append("g")
-  .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
-  
+.attr("transform",
+  "translate(" + margin.left + "," + margin.top + ")");
+
 
 d3.json('https://raw.githubusercontent.com/tobeal/trabajoVisual/main/datosSector.json', function (error, data) {
 
-    var dataset = [];
-    console.log(data.records)
-   data.records.forEach(function(d) {
-        
-        dataset.push({'x':d[4],'y':d[2],'value': d[7]+d[8]+d[9]+d[10]+d[11]+d[12]+d[13]+d[14]+d[15]+d[16]+d[17]+d[18]+d[19]+d[20]+d[21]+d[22]+d[23]+d[24]+d[25]+d[26]})
-        
+  console.log(data.fields)
+  data.records.forEach(function(d) {
+    dataset1.push({'x':d[4],'y':d[2],'value': d[6]+d[7]+ d[8]+d[9]+d[10]})
+    dataset2.push({'x':d[4],'y':d[2],'value': d[11]+d[12]+d[13]+ d[14]+d[15]})
+    dataset3.push({'x':d[4],'y':d[2],'value': d[16]+d[17]+d[18]+d[19]+ d[20]})
+    dataset4.push({'x':d[4],'y':d[2],'value': d[21]+d[22]+d[23]+d[24]+d[25]+d[26]})
 
-    });
-   console.log(dataset[0].y)
-    
-var myGroups = ["ALCAZABA", "ALVARADO", "ANTONIO DOMINGUEZ", "BALBOA", "BANASTA", "BARRIADA DE LLERA", "BARRIADA DE LOS COLORINES", "CASCO ANTIGUO", "CERRO DE REYES", "CERRO DE SAN MIGUEL","CERRO GORDO","COLONIA DE AVIACION","COMUNIDAD DE CESPEDES","COMUNIDAD SAN ONOFRE","CORAZON DE JESUS","CUARTON DEL CORTIJO","DEHESILLA DE CALAMON"]
+  });
+});
+
+
+var myGroups = ["ALCAZABA", "ANTONIO DOMINGUEZ", "BARRIADA DE LLERA", "BARRIADA DE LOS COLORINES", "CASCO ANTIGUO", "CERRO DE REYES", "CERRO DE SAN MIGUEL","CERRO GORDO","GEVORA","GUADIANA DEL CAUDILLO","SAN FERNANDO","URBANIZACION CIUDAD JARDIN"]
 var myVars = ["00-No aplicable por ser menor de 16 años", "NO SABE LEER NI ESCRIBIR", "SIN ESTUDIOS", "GRADUADO ESCOLAR O EQUIVALENTE", "BACHILLER, FP2, EQUIVALENTE O SUPERIOR"]
     // Build X scales and axis:
-var x = d3.scaleBand()
-  .range([ 10, width ])
-  .domain(myGroups)
-  .padding(0.01)  ;
-svg.append("g")
-  .attr("transform", "translate(0," + 750 + ")")
+    var x = d3.scaleBand()
+    .range([ 10, width ])
+    .domain(myGroups)
+    .padding(0.01)  ;
+    svg.append("g")
+    .attr("transform", "translate(0," + 750 + ")")
 
-  .call(d3.axisBottom(x))
-  .selectAll("text") 
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", "rotate(-65)");
+    .call(d3.axisBottom(x))
+    .selectAll("text") 
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", "rotate(-65)");
 
 // Build X scales and axis:
 var y = d3.scaleBand()
-  .range([ height-300, 100 ])
-  .domain(myVars)
-  .padding(0.01);
+.range([ height-300, 100 ])
+.domain(myVars)
+.padding(0.01);
 svg.append("g")
-  .call(d3.axisLeft(y))
-  .attr("transform", "translate(0," + -50 + ")");
- var tooltip = d3.select("#my_dataviz")
-    .append("div")
-    .style("opacity", 0)
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
+.call(d3.axisLeft(y))
+.attr("transform", "translate(0," + -50 + ")");
+var tooltip = d3.select("#my_dataviz")
+.append("div")
+.style("opacity", 0)
+.attr("class", "tooltip")
+.style("background-color", "white")
+.style("border", "solid")
+.style("border-width", "2px")
+.style("border-radius", "5px")
+.style("padding", "5px")
+function update(data) {
+
 // Build color scale
 var myColor = d3.scaleLinear()
-  .range(["white", "#69b3a2"])
-  .domain([1,10000])
+.range(["white", "#69b3a2"])
+.domain([1,5000])
       // create a tooltip
-  var tooltip = d3.select("#my_dataviz")
-    .append("div")
-    .style("opacity", 0)
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
+      var tooltip = d3.select("#my_data")
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px")
 
   // Three function that change the tooltip when user hover / move / leave a cell
   var mouseover = function(d) {
@@ -95,27 +105,32 @@ var myColor = d3.scaleLinear()
   }
   var mousemove = function(d) {
     tooltip
-      .html("The exact value of<br>this cell is: " + d.value)
-      .style("left", (d3.mouse(this)[0]+70) + "px")
-      .style("top", (d3.mouse(this)[1]) + "px")
+    .html("El número de personas<br>es: " + d.value)
+    .style("left", (d3.mouse(this)[0]) + "px")
+    .style("top", (d3.mouse(this)[1]) + "px")
   }
   var mouseleave = function(d) {
     tooltip.style("opacity", 0)
   }
 
+
+
+  
   // add the squares
   svg.selectAll()
-    .data(dataset, function(d) {return d.x+':'+d.y;})
-    .enter()
-    .append("rect")
-      .attr("x", function(d) { return x(d.x) })
-      .attr("y", function(d) { return y(d.y) })
-      .attr("width", x.bandwidth() )
-      .attr("height", y.bandwidth() )
-      .style("fill", function(d) { return myColor(d.value)} )
-    .on("mouseover", mouseover)
-    .on("mousemove", mousemove)
-    .on("mouseleave", mouseleave)
-  });
-  
+  .data(data, function(d) {return d.x+':'+d.y;})
+  .enter()
+  .append("rect")
+  .attr("x", function(d) { return x(d.x) })
+  .attr("y", function(d) { return y(d.y) })
+  .attr("width", x.bandwidth() )
+  .attr("height", y.bandwidth() )
+  .style("fill", function(d) { return myColor(d.value)} )
+  .on("mouseover", mouseover)
+  .on("mousemove", mousemove)
+  .on("mouseleave", mouseleave)
+
+}
+update(dataset1)
+
 </script>
